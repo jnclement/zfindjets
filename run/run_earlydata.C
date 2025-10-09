@@ -113,6 +113,7 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0)
   zztowerjetreco->add_input(zzohtji);
   zztowerjetreco->add_input(zzihtji);
   zztowerjetreco->add_algo(new FastJetAlgoSub(Jet::ANTIKT, 0.4), "zzjets");
+  zztowerjetreco->add_algo(new FastJetAlgoSub(Jet::ANTIKT, 0.6), "zzjets06");
   zztowerjetreco->set_algo_node("ANTIKT");
   zztowerjetreco->set_input_node("TOWER");
   zztowerjetreco->Verbosity(verbosity);
@@ -148,6 +149,8 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0)
   dztowerjetreco->Verbosity(verbosity);
   se->registerSubsystem(dztowerjetreco);
 
+
+  /*
   JetReco *truthjetreco = new JetReco();  
   TruthJetInput *tji = new TruthJetInput(Jet::PARTICLE);
   tji->add_embedding_flag(0);  // changes depending on signal vs. embedded
@@ -156,7 +159,8 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0)
   truthjetreco->set_algo_node("ANTIKT");
   truthjetreco->set_input_node("TRUTH");
   se->registerSubsystem(truthjetreco);
-
+  */
+  
   zfinder* zf = new zfinder("zf",verbosity);
   se->registerSubsystem(zf);
   
