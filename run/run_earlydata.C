@@ -49,7 +49,7 @@ R__LOAD_LIBRARY(libg4dst.so)
 //gSystem->Load("libg4detectors.so");
 R__LOAD_LIBRARY(libzfinder.so)
 R__LOAD_LIBRARY(libzfindjets.so)
-int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0)
+int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, int usez = 0, int setz = 1)
 {
   
   int verbosity = debug;
@@ -161,9 +161,9 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0)
   se->registerSubsystem(truthjetreco);
   */
   
-  zfinder* zf = new zfinder("zf",verbosity);
+  zfinder* zf = new zfinder("zf",verbosity,(usez==0?false:true),(setz==1?true:false));
   se->registerSubsystem(zf);
-  
+
   JetReco *cztowerjetreco = new JetReco("cz");
   TowerJetInput* czemtji = new TowerJetInput(Jet::CEMC_TOWERINFO_RETOWER,"TOWERINFO_CALIB");
   TowerJetInput* czohtji = new TowerJetInput(Jet::HCALIN_TOWERINFO,"TOWERINFO_CALIB");

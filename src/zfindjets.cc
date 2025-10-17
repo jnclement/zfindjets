@@ -70,7 +70,7 @@
 using namespace std;
 
 //____________________________________________________________________________..
-zfindjets::zfindjets(const std::string &filename, const std::string &name, const int debug):
+zfindjets::zfindjets(const std::string &filename, const std::string &name, const int debug, int isdat):
   SubsysReco(name)
 {
   _name = name;
@@ -81,6 +81,7 @@ zfindjets::zfindjets(const std::string &filename, const std::string &name, const
   _f = new TFile(_filename.c_str(), "RECREATE");
   _f->cd();
   jet_tree->SetDirectory(_f);
+  _isdat = isdat;
 }
 
 //____________________________________________________________________________..
@@ -113,13 +114,14 @@ int zfindjets::Init(PHCompositeNode *topNode)
   jet_tree->Branch("czjet_eta",_czjet_eta,"czjet_eta[czjet_n]/F");
   jet_tree->Branch("czjet_phi",_czjet_phi,"czjet_phi[czjet_n]/F");
   jet_tree->Branch("czjet_e",_czjet_e,"czjet_e[czjet_n]/F");
-  
-  jet_tree->Branch("tjet_n",&_tjet_n,"tjet_n/I");
-  jet_tree->Branch("tjet_e",_tjet_e,"tjet_e[tjet_n]/F");
-  jet_tree->Branch("tjet_pt",_tjet_pt,"tjet_pt[tjet_n]/F");
-  jet_tree->Branch("tjet_eta",_tjet_eta,"tjet_eta[tjet_n]/F");
-  jet_tree->Branch("tjet_phi",_tjet_phi,"tjet_phi[tjet_n]/F");
-  
+  if(!isdat)
+    {
+      jet_tree->Branch("tjet_n",&_tjet_n,"tjet_n/I");
+      jet_tree->Branch("tjet_e",_tjet_e,"tjet_e[tjet_n]/F");
+      jet_tree->Branch("tjet_pt",_tjet_pt,"tjet_pt[tjet_n]/F");
+      jet_tree->Branch("tjet_eta",_tjet_eta,"tjet_eta[tjet_n]/F");
+      jet_tree->Branch("tjet_phi",_tjet_phi,"tjet_phi[tjet_n]/F");
+    }
   return Fun4AllReturnCodes::EVENT_OK;
 }
 

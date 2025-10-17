@@ -20,7 +20,7 @@ class zfindjets : public SubsysReco
 {
  public:
 
-  zfindjets(const std::string &filename = "/sphenix/user/jocl/projects/run2024_earlydata/run/output/temphists/debug.root", const std::string &name = "zfindjets", const int debug = 0);
+  zfindjets(const std::string &filename = "/sphenix/user/jocl/projects/run2024_earlydata/run/output/temphists/debug.root", const std::string &name = "zfindjets", const int debug = 0, const int isdat = 0);
 
   virtual ~zfindjets();
 
@@ -74,6 +74,7 @@ class zfindjets : public SubsysReco
   float _tjet_phi[100];
   
   int _nprocessed;
+  int _isdat;
 };
 
 #endif // ZFINDJETS
