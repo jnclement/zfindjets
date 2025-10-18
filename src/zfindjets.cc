@@ -114,7 +114,7 @@ int zfindjets::Init(PHCompositeNode *topNode)
   jet_tree->Branch("czjet_eta",_czjet_eta,"czjet_eta[czjet_n]/F");
   jet_tree->Branch("czjet_phi",_czjet_phi,"czjet_phi[czjet_n]/F");
   jet_tree->Branch("czjet_e",_czjet_e,"czjet_e[czjet_n]/F");
-  if(!isdat)
+  if(!_isdat)
     {
       jet_tree->Branch("tjet_n",&_tjet_n,"tjet_n/I");
       jet_tree->Branch("tjet_e",_tjet_e,"tjet_e[tjet_n]/F");
