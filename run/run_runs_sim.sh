@@ -18,4 +18,4 @@ nfile=1000
 if [ $evt -gt 1000 ]; then
     evt=0
 fi
-bash run_everysim.sh $1 $nfile $rn 1 $evt 0 $4 0 $3 $4
+bash run_everysim.sh $1 $nfile $rn 1 $evt 0 $3 $4

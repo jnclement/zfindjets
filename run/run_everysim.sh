@@ -16,7 +16,7 @@ BASENAME="condor_${TAG}_${NFILE}_${RN}_${ZS}_${EVT}"
 SUBNAME="${BASENAME}.sub"
 
 echo "executable = earlysim.sh" > $SUBNAME
-echo "arguments = ${TAG} \$(Process) ${RN} ${ZS} ${EVT} ${C2C} ${7} ${8} ${9}" >> $SUBNAME
+echo "arguments = ${TAG} \$(Process) ${RN} ${ZS} ${EVT} ${C2C} ${7} ${8}" >> $SUBNAME
 echo "output = /sphenix/user/jocl/projects/zfindjets/run/output/out/output_${BASENAME}_\$(Process).out" >> $SUBNAME
 echo "request_memory                = 4GB" >> $SUBNAME
 echo "should_transfer_files   = IF_NEEDED" >> $SUBNAME
