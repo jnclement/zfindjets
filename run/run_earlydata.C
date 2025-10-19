@@ -70,10 +70,10 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, i
   Fun4AllDstInputManager *in_2 = new Fun4AllDstInputManager("DSTin2");
   Fun4AllDstInputManager *in_3 = new Fun4AllDstInputManager("DSTin3");
   Fun4AllDstInputManager *in_4 = new Fun4AllDstInputManager("DSTin4");
-  in_1->Verbosity(debug);
-  in_2->Verbosity(debug);
-  in_3->Verbosity(debug);
-  in_4->Verbosity(debug);
+  in_1->Verbosity(verbosity);
+  in_2->Verbosity(verbosity);
+  in_3->Verbosity(verbosity);
+  in_4->Verbosity(verbosity);
   cout << "get filenames" << endl;
   string line1, line2, line3, line4;
   line1 = "./dsts/"+to_string(nproc)+"/calo_cluster_"+to_string(nproc)+".root";
@@ -161,7 +161,7 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, i
   se->registerSubsystem(truthjetreco);
   */
   
-  zfinder* zf = new zfinder("zf",verbosity,(usez==0?false:true),(setz==1?true:false));
+  zfinder* zf = new zfinder("zf",debug,(usez==0?false:true),(setz==1?true:false));
   se->registerSubsystem(zf);
 
   JetReco *cztowerjetreco = new JetReco("cz");
@@ -183,7 +183,7 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, i
   cout << "set up jetreco" << endl;
       //}
 
-  zfindjets* zj = new zfindjets(zfindfilename,"zj",verbosity);
+  zfindjets* zj = new zfindjets(zfindfilename,"zj",debug);
   se->registerSubsystem(zj);
   
   cout << "test4" << endl;
