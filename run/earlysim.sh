@@ -30,9 +30,9 @@ for i in {0..9}; do
     #GLOBALF=`sed -n "${UPLN}"p ./lists/dst_global.list`
     TRTHJET=`sed -n "${UPLN}"p ./lists/dst_truth_jet.list`
     DMBDEPD=`sed -n "${UPLN}"p ./lists/dst_mbd_epd.list`
-    FULLTRTH=`psql FileCatalog -tA -c "select full_file_path from files where lfn = '${TRTHJET}';"`
-    FULLMBEP=`psql FileCatalog -tA -c "select full_file_path from files where lfn = '${DMBDEPD}';"`
-    FULLCALO=`psql FileCatalog -tA -c "select full_file_path from files where lfn = '${CALOCLF}';"`
+    #FULLTRTH=`psql FileCatalog -tA -c "select full_file_path from files where lfn = '${TRTHJET}';"`
+    #FULLMBEP=`psql FileCatalog -tA -c "select full_file_path from files where lfn = '${DMBDEPD}';"`
+    #FULLCALO=`psql FileCatalog -tA -c "select full_file_path from files where lfn = '${CALOCLF}';"`
     #FULLG4HT=`psql FileCatalog -tA -c "select full_file_path from files where lfn = '${G4HITSF}';"`
     echo $CALOCLF
     #echo $GLOBALF
