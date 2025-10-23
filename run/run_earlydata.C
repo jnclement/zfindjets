@@ -49,46 +49,54 @@ R__LOAD_LIBRARY(libg4dst.so)
 //gSystem->Load("libg4detectors.so");
 R__LOAD_LIBRARY(libzfinder.so)
 R__LOAD_LIBRARY(libzfindjets.so)
-int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, int usez = 0, int setz = 1)
+int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, int usez = 0, int setz = 1, int rn = 0, int isdat = 0)
 {
   
   int verbosity = debug;
-  string zfindfilename = "./"+to_string(nproc)+"_zfind/events_"+tag+"_"+to_string(nproc)+"_"+to_string(nproc)+"_"+to_string(nevt)+"_zfindfile.root";
+  string zfindfilename = "./"+to_string((isdat?rn:nproc))+"_zfind/events_"+tag+"_"+to_string(rn)+"_"+to_string(nproc)+"_"+to_string(nevt)+"_zfindfile.root";
   cout << "test1" << endl;
   Fun4AllServer *se = Fun4AllServer::instance();
   recoConsts *rc =  recoConsts::instance();
-  rc->set_StringFlag("CDB_GLOBALTAG","MDC2");
-  rc->set_uint64Flag("TIMESTAMP",28);
+  rc->set_StringFlag("CDB_GLOBALTAG",isdat?"ProdA_2024":"MDC2");
+  rc->set_uint64Flag("TIMESTAMP",isdat?rn:28);
   
   se->Verbosity(verbosity);
   // just if we set some flags somewhere in this macro
 
 
   
-
+  Fun4AllDstInputManager *in_0 = new Fun4AllDstInputManager("DSTin0");
   Fun4AllDstInputManager *in_1 = new Fun4AllDstInputManager("DSTin1");
   Fun4AllDstInputManager *in_2 = new Fun4AllDstInputManager("DSTin2");
   Fun4AllDstInputManager *in_3 = new Fun4AllDstInputManager("DSTin3");
   Fun4AllDstInputManager *in_4 = new Fun4AllDstInputManager("DSTin4");
-  in_1->Verbosity(verbosity);
-  in_2->Verbosity(verbosity);
-  in_3->Verbosity(verbosity);
-  in_4->Verbosity(verbosity);
-  cout << "get filenames" << endl;
-  string line1, line2, line3, line4;
-  line1 = "./dsts/"+to_string(nproc)+"/calo_cluster_"+to_string(nproc)+".root";
-  line2 = "./dsts/"+to_string(nproc)+"/g4hits_"+to_string(nproc)+".root";
-  line3 = "./dsts/"+to_string(nproc)+"/mbd_epd_"+to_string(nproc)+".root";
-  line4 = "./dsts/"+to_string(nproc)+"/truth_jet_"+to_string(nproc)+".root";
-  in_1->AddFile(line1);
-  in_2->AddFile(line2);
-  in_3->AddFile(line3);
-  in_4->AddFile(line4);
-  se->registerInputManager( in_1 );
-  se->registerInputManager( in_2 );
-  se->registerInputManager( in_3 );
-  se->registerInputManager( in_4 );
-  
+  if(isdat)
+    {
+      in_0->Verbosity(verbosity);
+      in_0->AddFile("./dsts/"+to_string(rn)+"/"+to_string(rn)+"_"+to_string(nproc)+".root");
+      se->registerInputManager(in_0);
+    }
+  else
+    {
+      in_1->Verbosity(verbosity);
+      in_2->Verbosity(verbosity);
+      in_3->Verbosity(verbosity);
+      in_4->Verbosity(verbosity);
+      cout << "get filenames" << endl;
+      string line1, line2, line3, line4;
+      line1 = "./dsts/"+to_string(nproc)+"/calo_cluster_"+to_string(nproc)+".root";
+      line2 = "./dsts/"+to_string(nproc)+"/g4hits_"+to_string(nproc)+".root";
+      line3 = "./dsts/"+to_string(nproc)+"/mbd_epd_"+to_string(nproc)+".root";
+      line4 = "./dsts/"+to_string(nproc)+"/truth_jet_"+to_string(nproc)+".root";
+      in_1->AddFile(line1);
+      in_2->AddFile(line2);
+      in_3->AddFile(line3);
+      in_4->AddFile(line4);
+      se->registerInputManager( in_1 );
+      se->registerInputManager( in_2 );
+      se->registerInputManager( in_3 );
+      se->registerInputManager( in_4 );
+    }
   std::cout << "status setters" << std::endl;
   
   CDBInterface::instance()->Verbosity(0);
@@ -108,7 +116,10 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, i
   TowerJetInput* zzihtji = new TowerJetInput(Jet::HCALOUT_TOWERINFO,"TOWERINFO_CALIB");
   zzemtji->set_GlobalVertexType(GlobalVertex::VTXTYPE::MBD);
   zzohtji->set_GlobalVertexType(GlobalVertex::VTXTYPE::MBD);
-  zzihtji->set_GlobalVertexType(GlobalVertex::VTXTYPE::MBD);      
+  zzihtji->set_GlobalVertexType(GlobalVertex::VTXTYPE::MBD);
+  zzemtji->Verbosity(verbosity);
+  zzihtji->Verbosity(verbosity);
+  zzohtji->Verbosity(verbosity);
   zztowerjetreco->add_input(zzemtji);
   zztowerjetreco->add_input(zzohtji);
   zztowerjetreco->add_input(zzihtji);
@@ -123,7 +134,7 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, i
   auto mbdreco = new MbdReco();
   GlobalVertexReco* gblvertex = new GlobalVertexReco();
   mbddigi->Verbosity(verbosity);
-  se->registerSubsystem(mbddigi);
+  if(!isdat) se->registerSubsystem(mbddigi);
   mbdreco->Verbosity(verbosity);
   se->registerSubsystem(mbdreco);
   
@@ -183,7 +194,7 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, i
   cout << "set up jetreco" << endl;
       //}
 
-  zfindjets* zj = new zfindjets(zfindfilename,"zj",debug);
+  zfindjets* zj = new zfindjets(zfindfilename,"zj",debug,isdat);
   se->registerSubsystem(zj);
   
   cout << "test4" << endl;

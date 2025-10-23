@@ -14,7 +14,7 @@ if [ $evt -gt 100000 ]; then
     evt=0
 fi
 echo $evt
-for rn in `cat runlist.list`; do
+for rn in `cat lists/runlist.list`; do
     rn=$(expr $rn + 0)
     nfile=`wc -l lists/dst_calofitting-000${rn}.list | awk '{print $1}'`
     njob=$(( $nfile + 4 ))
