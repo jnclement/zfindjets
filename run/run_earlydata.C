@@ -22,7 +22,8 @@
 #include <TruthJetInput.h>//#include <G4Setup_sPHENIX.C>
 #include <MbdDigitization.h>
 #include <MbdReco.h>
-#include <zfinder/zfinder.h>
+#include <trigzvtxchecker/Trigzvtxchecker.h>
+#include <calovtxreco/CaloVtxReco.h>
 #include <zfindjets/zfindjets.h>
 
 using namespace std;
@@ -45,11 +46,9 @@ R__LOAD_LIBRARY(libjetbase.so)
 R__LOAD_LIBRARY(libjetbackground.so)
 R__LOAD_LIBRARY(libtrigzvtxchecker.so)
 R__LOAD_LIBRARY(libg4dst.so)
-//gSystem->Load("libg4detectors.so");
-//gSystem->Load("libg4detectors.so");
-R__LOAD_LIBRARY(libzfinder.so)
+R__LOAD_LIBRARY(libcalovtxreco.so)
 R__LOAD_LIBRARY(libzfindjets.so)
-int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, int usez = 0, int setz = 1, int rn = 0, int isdat = 0)
+int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, int rn = 0, int isdat = 0)
 {
   
   int verbosity = debug;
@@ -101,6 +100,10 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, i
   
   CDBInterface::instance()->Verbosity(0);
 
+  Trigzvtxchecker* tz;
+  if(isdat) tz = new Trigzvtxchecker("null.root", rn, nproc, debug, "tzvtx");
+  if(isdat) se->registerSubsystem(tz);
+  
   Process_Calo_Calib();
 
   RetowerCEMC *rcemc = new RetowerCEMC();
@@ -132,6 +135,8 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, i
 
   auto mbddigi = new MbdDigitization();                                                                              
   auto mbdreco = new MbdReco();
+  CaloVtxReco* zf = new CaloVtxReco("zf","zzjets06",debug);
+  se->registerSubsystem(zf);
   GlobalVertexReco* gblvertex = new GlobalVertexReco();
   mbddigi->Verbosity(verbosity);
   if(!isdat) se->registerSubsystem(mbddigi);
@@ -172,8 +177,7 @@ int run_earlydata(string tag = "", int nproc = 0, int debug = 0, int nevt = 0, i
   se->registerSubsystem(truthjetreco);
   */
   
-  zfinder* zf = new zfinder("zf",debug,(usez==0?false:true),(setz==1?true:false));
-  se->registerSubsystem(zf);
+  
 
   JetReco *cztowerjetreco = new JetReco("cz");
   TowerJetInput* czemtji = new TowerJetInput(Jet::CEMC_TOWERINFO_RETOWER,"TOWERINFO_CALIB");

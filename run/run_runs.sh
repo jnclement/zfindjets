@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ $# -lt 4 ]; then
-    echo "Need tag argument (string), evtnum (int), usez (int), setz (int)"
+if [ $# -lt 2 ]; then
+    echo "Need tag argument (string), evtnum (int)"
     exit 1
 fi
 
@@ -17,8 +17,8 @@ echo $evt
 for rn in `cat lists/runlist.list`; do
     rn=$(expr $rn + 0)
     nfile=`wc -l lists/dst_calofitting-000${rn}.list | awk '{print $1}'`
-    njob=$(( $nfile + 4 ))
-    njob=$(( $njob / 5 ))
+    njob=$(( $nfile + 9 ))
+    njob=$(( $njob / 10 ))
     filecounter=$(( $filecounter + $njob ))
     if [ $filecounter -gt $nmax ]; then
 	break

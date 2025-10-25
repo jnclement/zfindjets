@@ -14,7 +14,7 @@ else
     exit -1
 fi
 SUBDIR=${3}
-STARTN=$(( $2 * 5 ))
+STARTN=$(( $2 * 10 ))
 echo $SUBDIR
 
 mkdir -p $SUBDIR
@@ -34,7 +34,7 @@ cp -r /sphenix/user/jocl/projects/zfindjets/run/lists/dst_calofitting-000$3.list
 cp /sphenix/user/jocl/projects/zfindjets/run/lists/dst_triggered_event_seb*-000$3.list ./lists/
 echo "copied dstlist here"
 
-for i in {0..4}; do
+for i in {0..9}; do
     UPLN=$(( $STARTN + $i + 1 ))
     #DSTFILE=`sed -n "${UPLN}"p "./lists/${3}_jetcalo.list"`
     #if [ -z "${DSTFILE}" ]; then
@@ -59,7 +59,7 @@ for i in {0..4}; do
     echo "Running Fun4All now"
     echo $DSTFILE
     echo ./dsts/$3/${3}_$UPLN.root
-    root -b -q 'run_earlydata.C("'${1}'",'$UPLN',0,'${5}','${6}','${7}','${3}',1)'
+    root -b -q 'run_earlydata.C("'${1}'",'$UPLN',0,'${5}','${3}',1)'
     echo " "
     echo " "
     echo " "

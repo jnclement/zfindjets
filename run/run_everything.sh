@@ -18,7 +18,7 @@ SUBNAME="${BASENAME}.sub"
 
 #echo "executable = containerscripts/earlydata.sh" > $PREFIX/$SUBNAME
 echo "executable = earlydata.sh" > $PREFIX/$SUBNAME
-echo "arguments = ${TAG} \$(Process) ${RN} ${ZS} ${EVT} ${usez} ${setz}" >> $PREFIX/$SUBNAME
+echo "arguments = ${TAG} \$(Process) ${RN} ${ZS} ${EVT}" >> $PREFIX/$SUBNAME
 echo "priority = 100000000" >> $SUBNAME
 echo "output = output/out/output_${BASENAME}_\$(Process).out" >> $PREFIX/$SUBNAME
 echo "request_memory                = 4GB" >> $PREFIX/$SUBNAME

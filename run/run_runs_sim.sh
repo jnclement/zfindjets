@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ $# -lt 4 ]; then
-    echo "Need tag argument (string), evtnum (int), usez, setz"
+if [ $# -lt 2 ]; then
+    echo "Need tag argument (string), evtnum (int)"
     exit 1
 fi
 rn=0

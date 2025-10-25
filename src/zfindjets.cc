@@ -152,7 +152,7 @@ int zfindjets::process_event(PHCompositeNode *topNode)
   if(_nprocessed % 1000 == 0) cout << "processing event " << _nprocessed << endl;
 
   ++_nprocessed;
-  GlobalVertexMap* gvtxmap = findNode::getClass<GlobalVertexMapv1>(topNode, "GlobalVertexMap");
+  GlobalVertexMapv1* gvtxmap = findNode::getClass<GlobalVertexMapv1>(topNode, "GlobalVertexMap");
   _zvtx[0] = 0;
   _zvtx[1] = 0;
 
@@ -174,35 +174,11 @@ int zfindjets::process_event(PHCompositeNode *topNode)
 	    }
 	  return Fun4AllReturnCodes::ABORTEVENT;
 	}
+      std::vector<std::vector<GlobalVertex*>> gvtxs;
       for(int i=0; i<2; ++i)
 	{
-	  
-	  for(auto gvtxit : *gvtxmap)
-	    {
-	      GlobalVertex* gvtx = gvtxit.second;
-	      if (gvtx)
-		{
-		  auto startIter = gvtx->find_vertexes(vtxtype[i]);
-		  auto endIter = gvtx->end_vertexes();
-		  for (auto iter = startIter; iter != endIter; ++iter)
-		    {
-		      const auto &[type, vertexVec] = *iter;
-		      if (type != vtxtype[i])
-			{
-			  continue;
-			}
-		      for (const auto *vertex : vertexVec)
-			{
-			  if (!vertex)
-			    {
-			      continue;
-			    }
-			  _zvtx[i] = vertex->get_z();
-			  if(_zvtx[i] != 0) break;
-			}
-		    }
-		}
-	    }
+	  std::vector<const Vertex*> vv = gvtxmap->get_vtxs_of_type(vtxtype[i]);
+	  if(vv.size() > 0) _zvtx[i] = vv.at(0)->get_z();
 	}
     }
 
